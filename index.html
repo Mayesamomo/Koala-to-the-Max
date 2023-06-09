@@ -1,0 +1,124 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deconstruction - Koalas to the Max</title>
+  </head>
+  <body>
+
+    <svg width="1024" height="1024" id="svg">
+        <circle cx="512" cy="512" r="512" id="first">
+    </svg>
+
+    <canvas id="canvas" width="128" height="128">
+
+    <script>
+
+      
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let image = new Image();
+        image.onload = function(){
+            
+            ctx.drawImage(image, 0, 0);
+            first.addEventListener("mouseover", splitCircle);
+            // Set original colour
+            first.setAttributeNS(null, "style", "fill: " + getColour(512, 512, 512) + "; fill-opacity: 1;");
+
+        }
+        image.src = "flower-3.gif";
+
+
+        const svgns = "http://www.w3.org/2000/svg";
+        const svg = document.getElementById("svg");
+
+        let first = document.getElementById("first");
+
+        // Get colour function
+        function getColour(cx, cy, r)
+        {
+            cx = cx / 8;
+            cy = cy / 8;
+            r = r / 8;
+
+            let imageData = ctx.getImageData(cx - r, cy - r, r * 2, r * 2);
+            let imageArray = new Array()
+            for(let i = 0; i < imageData.data.length; i +=4){
+                let colour = "rgb(" + imageData["data"][0] + "," + 
+                imageData["data"][i+1] + "," + imageData["data"][i+2] + ")";
+                if()
+                
+                // console.log(colour);
+
+            }
+            
+            // let colour = "rgb(" + imageData["data"][0] + "," + 
+            //     imageData["data"][1] + "," + imageData["data"][2] + ")";
+
+            // console.log(colour);
+
+            return colour;
+        }
+        
+
+        function splitCircle(event)
+        {
+            console.log(event.target);
+
+            let cx = parseInt(event.target.getAttribute("cx"));
+            let cy = parseInt(event.target.getAttribute("cy"));
+            let r = parseInt(event.target.getAttribute("r"));
+
+            let newR = r / 2;
+
+            let topLeftCircle = document.createElementNS(svgns, "circle");
+            topLeftCircle.setAttributeNS(null, "cx", cx - newR);
+            topLeftCircle.setAttributeNS(null, "cy", cy - newR);
+            topLeftCircle.setAttributeNS(null, "r", newR);
+            topLeftCircle.setAttributeNS(null, "style", "fill: " + getColour(cx - newR, cy - newR, newR) + "; fill-opacity: 1;");
+            svg.appendChild(topLeftCircle);
+
+            let topRightCircle = document.createElementNS(svgns, "circle");
+            topRightCircle.setAttributeNS(null, "cx", cx + newR);
+            topRightCircle.setAttributeNS(null, "cy", cy - newR);
+            topRightCircle.setAttributeNS(null, "r", newR);
+            topRightCircle.setAttributeNS(null, "style", "fill: " + getColour(cx + newR, cy - newR, newR) + "; fill-opacity: 1;");
+            svg.appendChild(topRightCircle);
+
+            let bottomLeftCircle = document.createElementNS(svgns, "circle");
+            bottomLeftCircle.setAttributeNS(null, "cx", cx - newR);
+            bottomLeftCircle.setAttributeNS(null, "cy", cy + newR);
+            bottomLeftCircle.setAttributeNS(null, "r", newR);
+            bottomLeftCircle.setAttributeNS(null, "style", "fill: " + getColour(cx - newR, cy + newR, newR) + "; fill-opacity: 1;");
+            svg.appendChild(bottomLeftCircle);
+
+            let bottomRightCircle = document.createElementNS(svgns, "circle");
+            bottomRightCircle.setAttributeNS(null, "cx", cx + newR);
+            bottomRightCircle.setAttributeNS(null, "cy", cy + newR);
+            bottomRightCircle.setAttributeNS(null, "r", newR);
+            bottomRightCircle.setAttributeNS(null, "style", "fill: " + getColour(cx + newR, cy + newR, newR) + "; fill-opacity: 1;");
+            svg.appendChild(bottomRightCircle);
+
+            event.target.remove();
+
+            if(newR > 4)
+            {
+                topLeftCircle.addEventListener("mouseover", splitCircle);
+                topRightCircle.addEventListener("mouseover", splitCircle);
+                bottomLeftCircle.addEventListener("mouseover", splitCircle);
+                bottomRightCircle.addEventListener("mouseover", splitCircle);
+            }
+
+        }
+
+    </script>
+  </body>
+</html>
+
+   
+       
